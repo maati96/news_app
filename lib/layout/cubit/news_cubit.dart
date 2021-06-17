@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_app/modules/business/business_screen.dart';
 import 'package:news_app/modules/science/science_screen.dart';
-import 'package:news_app/modules/settings/settings_screen.dart';
 import 'package:news_app/modules/sports/sports_screen.dart';
 import 'package:news_app/shared/network/dio_helper.dart';
+import 'package:news_app/shared/network/local/cashe_helper.dart';
 
 part 'news_state.dart';
 
@@ -34,19 +34,12 @@ class NewsCubit extends Cubit<NewsStates> {
       ),
       label: 'Science',
     ),
-    BottomNavigationBarItem(
-      icon: Icon(
-        Icons.settings,
-      ),
-      label: 'Settings',
-    ),
   ];
 
   List<Widget> screens = [
     BusinessScreen(),
     SportsScreen(),
     ScienceScreen(),
-    SettingsScreen(),
   ];
 
   List<dynamic> business = [];
@@ -114,7 +107,7 @@ class NewsCubit extends Cubit<NewsStates> {
           'apiKey': '849c89780fb64b3c86d7eb5aa8334e0f',
         },
       ).then((value) {
-        sports = value.data['articles'];
+        science = value.data['articles'];
 
         print(science[0]);
         emit(NewsGetScienceSuccessState());
@@ -134,5 +127,16 @@ class NewsCubit extends Cubit<NewsStates> {
     if (index == 1) getSports();
     if (index == 2) getScience();
     emit(NewsBottomNavState());
+  }
+
+  bool isDark = false;
+
+  void changeAppMode() {
+    isDark = !isDark;
+    CasheHelper.putData(key: 'isDark', value: isDark).then(
+      (value) => {
+        emit(NewsChangeModeState()),
+      },
+    );
   }
 }

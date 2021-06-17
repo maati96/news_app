@@ -1,3 +1,4 @@
+import 'package:conditional_builder/conditional_builder.dart';
 import 'package:flutter/material.dart';
 
 Widget myDivider() => Padding(
@@ -8,7 +9,7 @@ Widget myDivider() => Padding(
         color: Colors.grey[300],
       ),
     );
-Widget buildArticleItem(article) => Padding(
+Widget buildArticleItem(article, context) => Padding(
       padding: const EdgeInsets.all(20.0),
       child: Row(
         children: [
@@ -36,10 +37,7 @@ Widget buildArticleItem(article) => Padding(
                   Expanded(
                     child: Text(
                       '${article['title']}',
-                      style: TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.w600,
-                      ),
+                      style: Theme.of(context).textTheme.bodyText1,
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -56,4 +54,15 @@ Widget buildArticleItem(article) => Padding(
           ),
         ],
       ),
+    );
+
+Widget articleBuilder(list, context) => ConditionalBuilder(
+      condition: list.length > 0,
+      builder: (context) => ListView.separated(
+          physics: BouncingScrollPhysics(),
+          itemBuilder: (context, index) =>
+              buildArticleItem(list[index], context),
+          separatorBuilder: (context, index) => myDivider(),
+          itemCount: 10),
+      fallback: (context) => Center(child: CircularProgressIndicator()),
     );

@@ -23,6 +23,14 @@ class NewsLayout extends StatelessWidget {
                   ),
                   onPressed: () {},
                 ),
+                IconButton(
+                  icon: Icon(
+                    Icons.brightness_4_rounded,
+                  ),
+                  onPressed: () {
+                    NewsCubit.get(context).changeAppMode();
+                  },
+                ),
               ],
             ),
             body: cubit.screens[cubit.currentIndex],

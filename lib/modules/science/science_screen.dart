@@ -1,4 +1,3 @@
-import 'package:conditional_builder/conditional_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_app/layout/cubit/news_cubit.dart';
@@ -11,15 +10,7 @@ class ScienceScreen extends StatelessWidget {
       listener: (context, state) {},
       builder: (context, state) {
         var list = NewsCubit.get(context).science;
-        return ConditionalBuilder(
-          condition: state is! NewsGetBusinessLoadingState,
-          builder: (context) => ListView.separated(
-              physics: BouncingScrollPhysics(),
-              itemBuilder: (context, index) => buildArticleItem(list[index]),
-              separatorBuilder: (context, index) => myDivider(),
-              itemCount: 10),
-          fallback: (context) => Center(child: CircularProgressIndicator()),
-        );
+        return articleBuilder(list, context);
       },
     );
   }
