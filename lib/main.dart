@@ -22,94 +22,102 @@ void main() async {
 class MyApp extends StatelessWidget {
   bool isDark;
   MyApp(this.isDark);
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-        create: (BuildContext context) => NewsCubit(),
-        child: BlocConsumer<NewsCubit, NewsStates>(
-          listener: (context, state) {
-            // TODO: implement listener
-          },
-          builder: (context, state) {
-            return MaterialApp(
-              debugShowCheckedModeBanner: false,
-              theme: ThemeData(
-                scaffoldBackgroundColor: Colors.white,
-                primarySwatch: Colors.deepOrange,
-                appBarTheme: AppBarTheme(
-                  backwardsCompatibility: false,
-                  systemOverlayStyle: SystemUiOverlayStyle(
-                    statusBarColor: Colors.white,
-                    statusBarIconBrightness: Brightness.dark,
-                  ),
-                  backgroundColor: Colors.white,
-                  elevation: 0.0,
-                  titleTextStyle: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  iconTheme: IconThemeData(
-                    color: Colors.black,
-                  ),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => NewsCubit()
+            ..getBusiness()
+            ..getSports()
+            ..getScience(),
+        ),
+        BlocProvider(
+          create: (BuildContext context) => NewsCubit()..changeAppMode(),
+        ),
+      ],
+      child: BlocConsumer<NewsCubit, NewsStates>(
+        listener: (context, state) {},
+        builder: (context, state) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+              scaffoldBackgroundColor: Colors.white,
+              primarySwatch: Colors.deepOrange,
+              appBarTheme: AppBarTheme(
+                backwardsCompatibility: false,
+                systemOverlayStyle: SystemUiOverlayStyle(
+                  statusBarColor: Colors.white,
+                  statusBarIconBrightness: Brightness.dark,
                 ),
-                bottomNavigationBarTheme: BottomNavigationBarThemeData(
-                  type: BottomNavigationBarType.fixed,
-                  selectedItemColor: Colors.deepOrange,
-                  unselectedItemColor: Colors.grey,
-                  elevation: 20.0,
-                  backgroundColor: Colors.white,
+                backgroundColor: Colors.white,
+                elevation: 0.0,
+                titleTextStyle: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold,
                 ),
-                textTheme: TextTheme(
-                  bodyText1: TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black,
-                  ),
+                iconTheme: IconThemeData(
+                  color: Colors.black,
                 ),
               ),
-              darkTheme: ThemeData(
-                scaffoldBackgroundColor: HexColor('333739'),
-                primarySwatch: Colors.deepOrange,
-                appBarTheme: AppBarTheme(
-                  backwardsCompatibility: false,
-                  systemOverlayStyle: SystemUiOverlayStyle(
-                    statusBarColor: HexColor('333739'),
-                    statusBarIconBrightness: Brightness.light,
-                  ),
-                  backgroundColor: HexColor('333739'),
-                  elevation: 0.0,
-                  titleTextStyle: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  iconTheme: IconThemeData(
-                    color: Colors.white,
-                  ),
-                ),
-                bottomNavigationBarTheme: BottomNavigationBarThemeData(
-                  type: BottomNavigationBarType.fixed,
-                  selectedItemColor: Colors.deepOrange,
-                  unselectedItemColor: Colors.grey,
-                  elevation: 20.0,
-                  backgroundColor: HexColor('333739'),
-                ),
-                textTheme: TextTheme(
-                  bodyText1: TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
-                  ),
+              bottomNavigationBarTheme: BottomNavigationBarThemeData(
+                type: BottomNavigationBarType.fixed,
+                selectedItemColor: Colors.deepOrange,
+                unselectedItemColor: Colors.grey,
+                elevation: 20.0,
+                backgroundColor: Colors.white,
+              ),
+              textTheme: TextTheme(
+                bodyText1: TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black,
                 ),
               ),
-              themeMode: NewsCubit.get(context).isDark
-                  ? ThemeMode.dark
-                  : ThemeMode.light,
-              home: NewsLayout(),
-            );
-          },
-        ));
+            ),
+            darkTheme: ThemeData(
+              scaffoldBackgroundColor: HexColor('333739'),
+              primarySwatch: Colors.deepOrange,
+              appBarTheme: AppBarTheme(
+                backwardsCompatibility: false,
+                systemOverlayStyle: SystemUiOverlayStyle(
+                  statusBarColor: HexColor('333739'),
+                  statusBarIconBrightness: Brightness.light,
+                ),
+                backgroundColor: HexColor('333739'),
+                elevation: 0.0,
+                titleTextStyle: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold,
+                ),
+                iconTheme: IconThemeData(
+                  color: Colors.white,
+                ),
+              ),
+              bottomNavigationBarTheme: BottomNavigationBarThemeData(
+                type: BottomNavigationBarType.fixed,
+                selectedItemColor: Colors.deepOrange,
+                unselectedItemColor: Colors.grey,
+                elevation: 20.0,
+                backgroundColor: HexColor('333739'),
+              ),
+              textTheme: TextTheme(
+                bodyText1: TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            themeMode: NewsCubit.get(context).isDark
+                ? ThemeMode.dark
+                : ThemeMode.light,
+            home: NewsLayout(),
+          );
+        },
+      ),
+    );
   }
 }

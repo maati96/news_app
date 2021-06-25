@@ -46,6 +46,7 @@ class NewsCubit extends Cubit<NewsStates> {
 
   void getBusiness() {
     emit(NewsGetBusinessLoadingState());
+
     DioHelper.getData(
       url: 'v2/top-headlines',
       query: {
@@ -54,16 +55,15 @@ class NewsCubit extends Cubit<NewsStates> {
         'apiKey': '849c89780fb64b3c86d7eb5aa8334e0f',
       },
     ).then((value) {
+      //print(value.data['articles'][0]['title']);
       business = value.data['articles'];
+      print(business[0]['title']);
 
-      print(business[0]);
       emit(NewsGetBusinessSuccessState());
-    }).catchError(
-      (error) {
-        print(error.toString());
-        emit(NewsGetBusinessErrorState(error.toString()));
-      },
-    );
+    }).catchError((error) {
+      print(error.toString());
+      emit(NewsGetBusinessErrorState(error.toString()));
+    });
   }
 
   List<dynamic> sports = [];
@@ -119,6 +119,35 @@ class NewsCubit extends Cubit<NewsStates> {
       );
     } else {
       emit(NewsGetScienceSuccessState());
+    }
+  }
+
+  List<dynamic> search = [];
+
+  void getSearch(String value) {
+    emit(NewsGetSearchLoadingState());
+    search = [];
+
+    if (search.length == 0) {
+      DioHelper.getData(
+        url: 'v2/everything',
+        query: {
+          'q': '$value',
+          'apiKey': '849c89780fb64b3c86d7eb5aa8334e0f',
+        },
+      ).then((value) {
+        search = value.data['articles'];
+
+        print(search[0]);
+        emit(NewsGetSearchSuccessState());
+      }).catchError(
+        (error) {
+          print(error.toString());
+          emit(NewsGetSearchErrorState(error.toString()));
+        },
+      );
+    } else {
+      emit(NewsGetSearchSuccessState());
     }
   }
 
